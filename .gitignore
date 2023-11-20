@@ -1,0 +1,20 @@
+_*
+
+# tools文件夹
+tools
+
+# 以._结尾的文件和.开头的所有文件
+*._
+.*
+!.gitignore
+
+# 不加入杂项
+.DS_Store
+._projects
+._tools
+._.DS_Store
+
+# 以.cmp和.tst和.out的文件
+*.cmp
+*.tst
+*.out
