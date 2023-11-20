@@ -1,0 +1,31 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/Memory.hdl
+/** 
+ * The Memory chip implements the complete address space of the Hack data memory,
+ * including the RAM and memory mapped I/O.
+ * Outputs the value of the memory location specified by the address input.
+ * If (load == 1), sets the memory location specified by the address input
+ * to the value of the in input.
+ * Address space rules:
+ * Only the upper 16K + 8K + 1 words of the memory are used.
+ * Access to address 0 to 16383 results in accessing the RAM;
+ * Access to address 16384 to 24575 results in accessing the Screen memory map;
+ * Access to address 24576 results in accessing the Keyboard memory map.
+ */ 
+CHIP Memory {
+    IN in[16], load, address[15];
+    OUT out[16];
+
+    PARTS:
+    // 与RAM8那道题类似,利用的是地址的前两位不同各对应不同的状态
+    // 故可以使用DMux和Mux来解决这个问题
+    // Elegant!!!
+    DMux4Way(in=load,sel=address[13..14],a=RAM1,b=RAM2,c=Screen1,d=Keyboard);
+    RAM16K(in=in,load=RAM1,address=address[0..13],out=RAMout1); // 00
+    RAM16K(in=in,load=RAM2,address=address[0..13],out=RAMout2); // 01
+    Screen(in=in,load=Screen1,address=address[0..12],out=Screenout); // 10
+    Keyboard(out=Keyboardout); // 11
+    Mux4Way16(a=RAMout1,b=RAMout2,c=Screenout,d=Keyboardout,sel=address[13..14],out=out);
+}

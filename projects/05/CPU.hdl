@@ -1,0 +1,86 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/05/CPU.hdl
+/**
+ * The Hack Central Processing unit (CPU).
+ * Parses the binary code in the instruction input and executes it according to the
+ * Hack machine language specification. In the case of a C-instruction, computes the
+ * function specified by the instruction. If the instruction specifies to read a memory
+ * value, the inM input is expected to contain this value. If the instruction specifies
+ * to write a value to the memory, sets the outM output to this value, sets the addressM
+ * output to the target address, and asserts the writeM output (when writeM == 0, any
+ * value may appear in outM).
+ * If the reset input is 0, computes the address of the next instruction and sets the
+ * pc output to that value. If the reset input is 1, sets pc to 0.
+ * Note: The outM and writeM outputs are combinational: they are affected by the
+ * instruction's execution during the current cycle. The addressM and pc outputs are
+ * clocked: although they are affected by the instruction's execution, they commit to
+ * their new values only in the next cycle.
+ */
+CHIP CPU {
+
+    IN  inM[16],         // M value input  (M = contents of RAM[A])
+        instruction[16], // Instruction for execution
+        reset;           // Signals whether to restart the current
+                         // program (reset==1) or continue executing
+                         // the current proram (reset==0).
+
+    OUT outM[16],        // M value output
+        writeM,          // Write to M? 
+        addressM[15],    // Address in data memory (of M)
+        pc[15];          // Address of next instruction
+
+    PARTS:
+    // 实在不会写只能看答案了,主要是不会判断A指令和C指令
+    Or(a=instruction[15],b=false,out=CInstruction); // C指令
+    Not(in=instruction[15],out=AInstruction); // 不是C指令的话就是A指令
+    And(a=CInstruction,b=instruction[5],out=iswriteA); // CInstruction && dest == A
+    Or(a=AInstruction,b=iswriteA,out=loadA); // writeA if(AInstruction || CInstruction && dest == A)
+
+    Mux16(a=instruction,b=ALUout,sel=iswriteA,out=inAreg); // 之所以sel是iswriteA,是因为iswriteA包括了A指令的情况,C指令的情况
+    ARegister(in=inAreg,load=loadA,out=outAreg,out[0..14]=addressM); // 这里的loadA决定了是否要写入A寄存器中
+
+    And(a=CInstruction,b=instruction[4],out=loadD);
+    DRegister(in=ALUout,load=loadD,out=outDreg); // D Register 
+
+    Mux16(a=outAreg,b=inM,sel=instruction[12],out=outAorM);
+
+    ALU(x=outDreg,
+        y=outAorM,
+        zx=instruction[11],
+        nx=instruction[10],
+        zy=instruction[9],
+        ny=instruction[8],
+        f=instruction[7],
+        no=instruction[6],
+        out=ALUout,
+        out=outM,
+        zr=zr,
+        ng=ng); 
+
+    And(a=CInstruction,b=instruction[3],out=writeM);
+
+    // PC 
+    Not(in=zr,out=notzero); // out!=0
+    Not(in=ng,out=notng); // out>=0
+    And(a=notzero,b=notng,out=positive); // out>0
+
+    And(a=positive,b=instruction[0],out=JGT); // out>0 situation
+    And(a=zr,b=instruction[1],out=JEQ);       // out=0 situation
+    And(a=ng,b=instruction[2],out=JLT);       // out<0  situation
+    Or(a=JEQ,b=JGT,out=JGE);                  // out>=0 situation
+    Or(a=JLT,b=JGT,out=JNE);                  // out!=0 situation
+    Or(a=JEQ,b=JLT,out=JLE);                  // out<=0 situation
+    Or(a=JLE,b=JGT,out=JMP);                  // unconditional jump
+
+    // you can list all the situations above
+    // or just list two of them as following
+
+    //Or(a=JEQ,b=JLT,out=JLE); // out<=0 situation
+    //Or(a=JLE,b=JGT,out=jumptoA);
+
+    And(a=CInstruction,b=JMP,out=loadPC); // if nojump then PC++
+    Not(in=loadPC,out=incPC);
+    PC(in=outAreg,inc=incPC,load=loadPC,reset=reset,out[0..14]=pc);
+}
