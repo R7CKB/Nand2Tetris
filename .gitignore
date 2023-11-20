@@ -14,7 +14,7 @@ tools
 ._tools
 ._.DS_Store
 
-# 以.cmp和.tst和.out的文件
+# 01project中以.cmp和.tst和.out的文件
 *.cmp
 *.tst
 *.out
