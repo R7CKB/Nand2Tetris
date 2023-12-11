@@ -542,7 +542,7 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
         return assembler_language
 
     # This is challenging;
-    # after seeing many of the answers, it seems they all see end_frame as R13 or R14
+    # after seeing many of the answers, it seems they all see end_frame as R13 or R14,
     # which is mentioned in the book.
     @staticmethod
     def write_return():
