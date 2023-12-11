@@ -1,36 +1,36 @@
 # author:R7CKB@qq.com
-# divide this Project into three segments: Paser,Code,Symbol_Table
-# do it all by yourself then you will learn it worthwhile
+# divide this Project into three segments: Paser, Code, Symbol_Table
+# do it all by yourself then you'll learn it worthwhile
 
 """
-I'm not an English native speaker,so my sentences maybe wrong sometimes,hope you can understand.
-I'm a rookie in the Python,I want you to point out my faults and I will correct them as soon as possible.
-to be honest,you need to have your own thoughts,
-besides you can't rely solely on the guideline either.
-if you rely too much on it,
+I'm not an English native speaker, so my sentences maybe wrong sometimes, hope you can understand.
+I'm a rookie in the Python, I want you to point out my faults, and I'll correct them as soon as possible.
+To be honest, you need to have your own thoughts,
+besides you can't rely solely on the guidelines either.
+If you rely too much on it,
 you will find it hard for you to implement these all steps one by one.
-In my opinion,first,I do it all by guideline,
-but then I find it is so hard for me to do these steps.
-so I don't do all depend on the guideline,
+In my opinion, first,I do it all by guideline,
+but then I find it's so hard for me to do these steps.
+So I don't do all depend on the guidelines,
 this version is my views about this project.
-I will keep most of the primary steps sand delete some unnecessary steps.
+I'll keep most of the primary steps and delete some unnecessary steps.
 """
 from enum import Enum
 
 
-class InstructionType(Enum):  # use enumerate to make type not be the string
+class InstructionType(Enum):  # use enumerating to make a type not be the string
     A_INSTRUCTION = 1
     C_INSTRUCTION = 2
 
 
-class Parser:  # The parser only need to parse each instruction
+class Parser:  # The parser only needs to parse each instruction
     def __init__(self, sentence):
         self.instruction = sentence  # current instruction
         self.instruction_type = ""  # instruction type
 
-    """I delete the method hasMoreLine,I don't think it is useful to implement this project"""
+    """I delete the method hasMoreLine, I don't think it's useful to implement this project"""
 
-    def advance(self):  # Get next instruction and make it current_instruction
+    def advance(self):  # Get the next instruction and make it current_instruction
         line = self.instruction
         if "//" in line and not line.startswith("//"):  # for those comments not start withs //
             index = line.find("//")
@@ -50,28 +50,28 @@ class Parser:  # The parser only need to parse each instruction
             self.instruction_type = ""
         else:
             self.instruction_type = InstructionType.C_INSTRUCTION
-            # In the all project, you will find it is no need to classify L_INSTRUCTION
-            # because L_INSTRUCTION is label,and we will deal with labels in the scan method
+            # In the all projects, you'll find it's no need to classify L_INSTRUCTION
+            # because L_INSTRUCTION is label,and we'll deal with labels in the scan method
 
     def symbol(self):
         return self.instruction[1:]
 
     def dest(self):
-        if ";" not in self.instruction:  # handle case such as D=M
+        if ";" not in self.instruction:  # handle a case such as D=M
             return self.instruction.split("=")[0]
         else:
             dest_comp = self.instruction.split(";")[0]
-            if "=" not in dest_comp:  # handle case such as D;JMP ATTENTION: This D means comp not dest
+            if "=" not in dest_comp:  # handle a case such as D;JMP ATTENTION: This D means comp not dest
                 return None
             else:
                 return dest_comp.split("=")[0]
 
     def comp(self):
-        if ";" not in self.instruction:  # handle case such as D=M
+        if ";" not in self.instruction:  # handle a case such as D=M
             return self.instruction.split("=")[1]
         else:
             dest_comp = self.instruction.split(";")[0]
-            if "=" not in dest_comp:  # handle case such as D;JMP
+            if "=" not in dest_comp:  # handle a case such as D;JMP
                 return dest_comp
             else:
                 return dest_comp.spli("=")[1]
@@ -86,18 +86,18 @@ class Parser:  # The parser only need to parse each instruction
 class Code:
     comp_dict = {
         '0': '0101010',
-        '1': '0111111',
-        '-1': '0111010',
+        'FibonacciSeries': '0111111',
+        '-FibonacciSeries': '0111010',
         'D': '0001100',
         'A': '0110000',
         '!D': '0001101',
         '!A': '0110001',
         '-D': '0001111',
         '-A': '0110011',
-        'D+1': '0011111',
-        'A+1': '0110111',
-        'D-1': '0001110',
-        'A-1': '0110010',
+        'D+FibonacciSeries': '0011111',
+        'A+FibonacciSeries': '0110111',
+        'D-FibonacciSeries': '0001110',
+        'A-FibonacciSeries': '0110010',
         'D+A': '0000010',
         'D-A': '0010011',
         'A-D': '0000111',
@@ -106,8 +106,8 @@ class Code:
         'M': '1110000',
         '!M': '1110001',
         '-M': '1110011',
-        'M+1': '1110111',
-        'M-1': '1110010',
+        'M+FibonacciSeries': '1110111',
+        'M-FibonacciSeries': '1110010',
         'D+M': '1000010',
         'D-M': '1010011',
         'M-D': '1000111',
@@ -153,7 +153,7 @@ class Code:
         try:
             if not 0 <= int(code) <= MAX_VALUE:  # to make sure the range is correct
                 raise ValueError("Invalid Value : %s" % code)
-            code = bin(int(code))[2:].zfill(16)  # find in the StackOverFlow,Cool!!!
+            code = bin(int(code))[2:].zfill(16)  # find in the StackOverFlow, Cool!!!
             return code
         except ValueError as e:
             print(f"Error:{e}")
@@ -212,7 +212,6 @@ class Assembler:  # This class is responsible for the assembly
         self.st = SymbolTable()
 
     def compile(self):
-        machine_code = ""
         # Create a hack file and write it
         index = self.file.find(".")
         file_name = self.file[:index]
@@ -227,7 +226,7 @@ class Assembler:  # This class is responsible for the assembly
                     sentence.advance()  # read instruction
                     if sentence_type == InstructionType.A_INSTRUCTION:
                         instruction = sentence.symbol()
-                        if instruction in self.st.symbol_table:  # handle case like instruction in symbol_table
+                        if instruction in self.st.symbol_table:  # handle a case like instruction in symbol_table
                             instruction = self.st.get_address(instruction)
                         machine_code = Code.binary(instruction)
                     elif sentence_type == InstructionType.C_INSTRUCTION:
@@ -236,7 +235,7 @@ class Assembler:  # This class is responsible for the assembly
                         instruction_jump = sentence.jump()
                         machine_code = "111" + Code.comp(instruction_comp) + Code.dest(instruction_dest) + Code.jump(
                             instruction_jump)
-                    # you don't need to worry about L_INSTRUCTION ,because we will handle it in the scan method
+                    # you don't need to worry about L_INSTRUCTION, because we'll handle it in the scan method
                     else:  # single-line and spaces
                         machine_code = ""
                     if machine_code != "":
@@ -249,7 +248,7 @@ class Assembler:  # This class is responsible for the assembly
     def first_scan(self):  # For the first scan, add loops to the symbol_table
         try:
             with open(self.file) as f:
-                number = -1  # Start with the zero row, not the first row, so set it to -1
+                number = -1  # Start with the zero row, not the first row, so set it to -FibonacciSeries
                 line = f.readline()
                 while line:
                     line = line.strip()
