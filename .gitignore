@@ -13,8 +13,11 @@ tools
 ._projects
 ._tools
 ._.DS_Store
+*.pdf
+*.html
+*.iml
 
-# 01project中以.cmp和.tst和.out的文件
+# project中以.cmp和.tst和.out的文件
 *.cmp
 *.tst
 *.out
