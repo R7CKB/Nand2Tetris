@@ -1,0 +1,57 @@
+/* a Dice class implement the dice function*/
+class Dice {
+    field int min_number;
+    field int max_number;
+    field LFSR32Rand LSFR;
+    field int seed1;
+    field int seed2;
+    field int seed3;
+    field int seed4;
+    field int seed5;
+    field int seed6;
+
+    // you can change the seed here
+    constructor Dice new() {
+        let LSFR = LFSR32Rand.new();
+        let seed1 = 2;
+        let seed2 = 17;
+        let seed3 = 37;
+        let seed4 = 73;
+        let seed5 = 67;
+        let seed6 = 97;
+        return this;
+    }
+
+    method int Six_dice() {
+        var int number;
+        do LSFR.seed(seed1,seed2);
+        let number = LSFR.randRange(1,6);
+        let seed1 = seed2 + 11;
+        let seed2 = seed1 + 13;
+        return number;
+    }
+
+    method int Twelve_dice() {
+        var int number;
+        do LSFR.seed(seed3,seed4);
+        let number = LSFR.randRange(1,12);
+        let seed3 = seed4 + 2;
+        let seed4 = seed3 + 7;
+        return number;
+    }
+
+    method int Twenty_dice() {
+        var int number;
+        do LSFR.seed(seed1,seed2);
+        let number = LSFR.randRange(1,20);
+        let seed5 = seed6 + 3;
+        let seed6 = seed5 + 5;
+        return number;
+    }
+    
+    method void dispose() {
+        do LSFR.dispose();
+        do Memory.deAlloc(this);
+        return;
+    } 
+}

@@ -1,0 +1,161 @@
+/* Implement a dice game
+* The rules of the game are whoever reaches 100 points first wins*/ 
+class PigGame {
+    field Pig pig; // the computer called pig
+    field Dice dice; // the dice used to play game
+    field int player_score; // the score of the player
+    field int pig_score; // the score of the pig
+    field int total_score; // the score of the game
+
+
+    constructor PigGame new() {
+        let dice = Dice.new();
+        let pig = Pig.new();
+        let total_score = 0;
+        let player_score = 0;
+        let pig_score = 0;
+
+        return this;
+    }
+
+    method void run() {
+        var int choice_number; // the choice of player 
+        var int pig_number; // the choice of pig
+        var int score; // the score of they got
+        var int turn; // Used to switch turns between pigs and players
+        var boolean exit;
+        let exit = false;
+        let turn = 0; // turn = 0 means player's turn, vice versa.
+        do Output.printString("The rules of the game are whoever reaches 100 points first wins");
+        do Output.println();
+        while(~exit){
+            if (total_score > 100) {
+                if (turn = 0) {
+                    do Output.moveCursor(0,0);
+                    do Screen.clearScreen();
+                    do Output.printString("The pig wins");
+                    do Output.println();
+                    do Output.printString("Hooey Hooey Hooey");
+                    do Output.println();
+                    do Output.printString("You can't even beat a pig!!!");
+                    let exit = true;
+                }
+                else{
+                    do Output.moveCursor(0,0);
+                    do Screen.clearScreen();
+                    do Output.printString("The player wins");
+                    do Output.println();
+                    do Output.printString("Are you kidding me?");
+                    do Output.println();
+                    do Output.printString("It's just a pig, so easy!");
+                    let exit = true;
+                }
+            }
+            if ((turn = 0) & (~exit)) {
+                do Output.printString("please enter your choice");
+                do Output.println();
+                do Output.printString("1 Represents Six-Sided Dice");
+                do Output.println();
+                do Output.printString("2 Represents Twelve-Sided Dice");
+                do Output.println();
+                do Output.printString("3 Represents Twenty-Sided Dice");
+                while ((choice_number = 0) & (~exit)){
+                    let choice_number = Keyboard.keyPressed(); 
+                    // choice_number is compared to the table in project4 
+                    do Sys.wait(10);
+                }
+                if (choice_number = 49) { // 49 means 1
+                    do Screen.clearScreen();
+                    let score = dice.Six_dice();
+                    let total_score = total_score + score;
+                    let player_score = score;
+                    do Output.println();
+                    do Output.printString("Your score is: ");
+                    do Output.printInt(player_score);
+                    do Output.println();
+                    do Output.printString("The pig score is: ");
+                    do Output.printInt(pig_score);
+                    do Output.println();
+                    do Output.printString("Total score is: ");
+                    do Output.printInt(total_score);
+                    do Output.println();
+                    do Output.moveCursor(0,0);
+                    let turn = 1;
+                }
+                if (choice_number = 50) { // 50 means 2
+                    do Screen.clearScreen();
+                    do Screen.clearScreen();
+                    let score = dice.Twelve_dice();
+                    let total_score = total_score + score;
+                    let player_score = score;
+                    do Output.println();
+                    do Output.printString("Your score is: ");
+                    do Output.printInt(player_score);
+                    do Output.println();
+                    do Output.printString("The pig score is: ");
+                    do Output.printInt(pig_score);
+                    do Output.println();
+                    do Output.printString("Total score is :");
+                    do Output.printInt(total_score);
+                    do Output.println();
+                    do Output.moveCursor(0,0);
+                    let turn = 1;
+                }
+                if (choice_number = 51) { // 51 means 3
+                    do Screen.clearScreen();
+                    do Screen.clearScreen();
+                    let score = dice.Twenty_dice();
+                    let total_score = total_score + score;
+                    let player_score = score;
+                    do Output.println();
+                    do Output.printString("Your score is: ");
+                    do Output.printInt(player_score);
+                    do Output.println();
+                    do Output.printString("The pig score is: ");
+                    do Output.printInt(pig_score);
+                    do Output.println();
+                    do Output.printString("Total score is :");
+                    do Output.printInt(total_score);
+                    do Output.println();
+                    do Output.moveCursor(0,0);
+                    let turn = 1;
+                }
+                while ((~(choice_number = 0)) & (~exit)) {
+                    let choice_number = Keyboard.keyPressed();
+                    do Sys.wait(10);
+                }
+            }
+            if ((turn = 1) & (~exit)) {
+                let pig_number = pig.random();
+                if (pig_number = 1){
+                    let score = dice.Six_dice();
+                    let total_score = total_score + score;
+                    let pig_score = score;
+                    let turn = 0;
+                }
+                if (pig_number = 2){
+                    let score = dice.Twelve_dice();
+                    let total_score = total_score + score;
+                    let pig_score = score;
+                    let turn = 0;
+                }
+                else {
+                    let score = dice.Twenty_dice();
+                    let total_score = total_score + score;
+                    let pig_score =score;
+                    let turn = 0;
+                }
+            }
+
+        }
+        return;
+    }
+
+    /** Disposes this game. */
+    method void dispose() {
+        do dice.dispose();
+        do pig.dispose();
+        do Memory.deAlloc(this);
+        return;
+    }
+}

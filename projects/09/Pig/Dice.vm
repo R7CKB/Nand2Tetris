@@ -1,0 +1,100 @@
+function Dice.new 0
+push constant 9
+call Memory.alloc 1
+pop pointer 0
+call LFSR32Rand.new 0
+pop this 2
+push constant 2
+pop this 3
+push constant 17
+pop this 4
+push constant 37
+pop this 5
+push constant 73
+pop this 6
+push constant 67
+pop this 7
+push constant 97
+pop this 8
+push pointer 0
+return
+function Dice.Six_dice 1
+push argument 0
+pop pointer 0
+push this 2
+push this 3
+push this 4
+call LFSR32Rand.seed 3
+pop temp 0
+push this 2
+push constant 1
+push constant 6
+call LFSR32Rand.randRange 3
+pop local 0
+push this 4
+push constant 11
+add
+pop this 3
+push this 3
+push constant 13
+add
+pop this 4
+push local 0
+return
+function Dice.Twelve_dice 1
+push argument 0
+pop pointer 0
+push this 2
+push this 5
+push this 6
+call LFSR32Rand.seed 3
+pop temp 0
+push this 2
+push constant 1
+push constant 12
+call LFSR32Rand.randRange 3
+pop local 0
+push this 6
+push constant 2
+add
+pop this 5
+push this 5
+push constant 7
+add
+pop this 6
+push local 0
+return
+function Dice.Twenty_dice 1
+push argument 0
+pop pointer 0
+push this 2
+push this 3
+push this 4
+call LFSR32Rand.seed 3
+pop temp 0
+push this 2
+push constant 1
+push constant 20
+call LFSR32Rand.randRange 3
+pop local 0
+push this 8
+push constant 3
+add
+pop this 7
+push this 7
+push constant 5
+add
+pop this 8
+push local 0
+return
+function Dice.dispose 0
+push argument 0
+pop pointer 0
+push this 2
+call LFSR32Rand.dispose 1
+pop temp 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

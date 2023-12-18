@@ -1,0 +1,29 @@
+/* implement a game which play dice with the player,
+* who first reach the 100 score will win*/
+class Pig {
+   field LFSR32Rand LSFR;
+
+   constructor Pig new() {
+      let LSFR = LFSR32Rand.new();
+      return this;
+   }
+
+   method int random() {
+      var int number;
+      var int seed1;
+      var int seed2;
+      let seed1 = 7;
+      let seed2 = 59;
+      do LSFR.seed(seed1,seed2);
+      let number = LSFR.randRange(1,3);
+      let seed1 = seed2 + 7;
+      let seed2 = seed1 + 13;
+      return number;
+   }
+   /** Disposes this Pig. */
+   method void dispose() {
+      do LSFR.dispose();
+      do Memory.deAlloc(this);
+      return;
+   }
+}
