@@ -1,1 +1,1 @@
-![[Pig_game.gif]]
+![Pig game](Pig_game.gif)
