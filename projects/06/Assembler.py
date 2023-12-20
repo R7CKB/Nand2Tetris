@@ -86,18 +86,18 @@ class Parser:  # The parser only needs to parse each instruction
 class Code:
     comp_dict = {
         '0': '0101010',
-        'FibonacciSeries': '0111111',
-        '-FibonacciSeries': '0111010',
+        '1': '0111111',
+        '-1': '0111010',
         'D': '0001100',
         'A': '0110000',
         '!D': '0001101',
         '!A': '0110001',
         '-D': '0001111',
         '-A': '0110011',
-        'D+FibonacciSeries': '0011111',
-        'A+FibonacciSeries': '0110111',
-        'D-FibonacciSeries': '0001110',
-        'A-FibonacciSeries': '0110010',
+        'D+1': '0011111',
+        'A+1': '0110111',
+        'D-1': '0001110',
+        'A-1': '0110010',
         'D+A': '0000010',
         'D-A': '0010011',
         'A-D': '0000111',
@@ -106,8 +106,8 @@ class Code:
         'M': '1110000',
         '!M': '1110001',
         '-M': '1110011',
-        'M+FibonacciSeries': '1110111',
-        'M-FibonacciSeries': '1110010',
+        'M+1': '1110111',
+        'M-1': '1110010',
         'D+M': '1000010',
         'D-M': '1010011',
         'M-D': '1000111',
@@ -248,7 +248,7 @@ class Assembler:  # This class is responsible for the assembly
     def first_scan(self):  # For the first scan, add loops to the symbol_table
         try:
             with open(self.file) as f:
-                number = -1  # Start with the zero row, not the first row, so set it to -FibonacciSeries
+                number = -1  # Start with the zero row, not the first row, so set it to -1
                 line = f.readline()
                 while line:
                     line = line.strip()
