@@ -60,7 +60,7 @@
     // after this step we only need to manipulate i instead of SCREEN
     (BLACKLOOP)
         // if (i == KBD) goto LOOP
-        // which means the pixels is full of the entire SCREEN) 
+        // which means the pixels is full of the entire SCREEN
         @i
         D=M
         @KBD
