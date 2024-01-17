@@ -32,18 +32,24 @@ CHIP CPU {
         pc[15];          // Address of next instruction
 
     PARTS:
-    // 实在不会写只能看答案了,主要是不会判断A指令和C指令
-    Or(a=instruction[15],b=false,out=CInstruction); // C指令
-    Not(in=instruction[15],out=AInstruction); // 不是C指令的话就是A指令
+    // if instruction[15]==1, then it's C instruction.
+    // else it's A instruction.
+    Or(a=instruction[15],b=false,out=CInstruction); // C Instruction
+    Not(in=instruction[15],out=AInstruction); // A Instruction
+    // the specific bit of instrcution depend on the C instruction format.
     And(a=CInstruction,b=instruction[5],out=iswriteA); // CInstruction && dest == A
     Or(a=AInstruction,b=iswriteA,out=loadA); // writeA if(AInstruction || CInstruction && dest == A)
 
-    Mux16(a=instruction,b=ALUout,sel=iswriteA,out=inAreg); // 之所以sel是iswriteA,是因为iswriteA包括了A指令的情况,C指令的情况
-    ARegister(in=inAreg,load=loadA,out=outAreg,out[0..14]=addressM); // 这里的loadA决定了是否要写入A寄存器中
+    // The reason why sel is iswriteA is because iswriteA includes the case of the A directive and the case of the C directive.
+    Mux16(a=instruction,b=ALUout,sel=iswriteA,out=inAreg); 
+    // Here loadA determines whether or not to write to register A
+    ARegister(in=inAreg,load=loadA,out=outAreg,out[0..14]=addressM); 
 
+    // instruciton[4] depend on the format of C instruction.
     And(a=CInstruction,b=instruction[4],out=loadD);
     DRegister(in=ALUout,load=loadD,out=outDreg); // D Register 
 
+    // why the sel is instruction[12] because the c instruction format.
     Mux16(a=outAreg,b=inM,sel=instruction[12],out=outAorM);
 
     ALU(x=outDreg,

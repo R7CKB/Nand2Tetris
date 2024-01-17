@@ -18,11 +18,11 @@ CHIP PC {
     OUT out[16];
     
     PARTS:
-    //要考虑冲突情况 即inc,reset,load多个为1的情况
-    //存在优先级关系,先reset,再load,最后inc
+    // Consider conflict cases i.e. inc, reset, load multiple 1s
+    // There is a priority relationship, first reset, then load, and finally inc
     Inc16(in=tempin,out=tempoutplus1);
-    Mux16(a=tempin,b=tempoutplus1,sel=inc,out=tempout1); // inc的情况
-    Mux16(a=tempout1,b=in,sel=load,out=tempout2); // 如果load 不管inc
-    Mux16(a=tempout2,b=false,sel=reset,out=tempout3); // 如果reset 不管load和inc
-    Register(in=tempout3,load=true,out=tempin,out=out); //最后统一通过Register输出
+    Mux16(a=tempin,b=tempoutplus1,sel=inc,out=tempout1); // inc's case
+    Mux16(a=tempout1,b=in,sel=load,out=tempout2); // If load doesn't matter inc
+    Mux16(a=tempout2,b=false,sel=reset,out=tempout3); // If reset ignores load and inc
+    Register(in=tempout3,load=true,out=tempin,out=out); // Finally, it is output through Register
 }

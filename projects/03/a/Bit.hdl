@@ -13,6 +13,7 @@ CHIP Bit {
     OUT out;
 
     PARTS:
+    // at the beginning the tempin will be set 0.
     Mux(a=tempin,b=in,sel=load,out=tempout);
     DFF(in=tempout,out=tempin,out=out);
 }

@@ -47,7 +47,8 @@ CHIP ALU {
     Mux4Way16(a=x,b=false,c=notx,d=true,sel[0]=zx,sel[1]=nx,out=tempx);
     Mux4Way16(a=y,b=false,c=noty,d=true,sel[0]=zy,sel[1]=ny,out=tempy);
 
-    // f&no&ng ng这个地方有些难想到,可能是还不怎么会表示
+    // f&no&ng ng is challenging to think about, 
+    // you need to know that two's compliment'sign means it is positive or negative.
     And16(a=tempx,b=tempy,out=xandy);
     Add16(a=tempx,b=tempy,out=xplusy);
     Not16(in=xandy,out=notxandy);
@@ -55,7 +56,7 @@ CHIP ALU {
     Mux4Way16(a=xandy,b=xplusy,c=notxandy,d=notxplusy,sel[0]=f,sel[1]=no,out[0..7]=lowout,out[8..15]=highout,out[15]=ng);
     Mux4Way16(a=xandy,b=xplusy,c=notxandy,d=notxplusy,sel[0]=f,sel[1]=no,out=out);
 
-    // zr  这里只要想到了如何将多位转换成一位就OK
+    // zr  you need to think about how to turn multiple bits into one bit
     Or8Way(in=lowout,out=temp1);
     Or8Way(in=highout,out=temp2);
     Or(a=temp1,b=temp2,out=notzr);

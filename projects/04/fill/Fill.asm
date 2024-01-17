@@ -15,7 +15,7 @@
 // problem is how to draw the all screen
 // need pointers to solve this problem 
 
-//pseudocode
+// pseudocode
 // (INFINITELOOP)
 //      if (KBD !=0 goto BLACK)
 //      else goto WHITE
@@ -27,10 +27,10 @@
 //      RAM[SCREEN+i]=0
 // i means registers
 
-// In My opinion this problem should not be complicaed 
-// but it spend me a lot of time
-// its target to mainpulate address of keyboard
-// and put these value to -1 or 0
+// In My opinion this problem should not be complicaed, 
+// but it spends me a lot of time.
+// its target to mainpulate address of screen,
+// and put these value to -1 or 0.
 
 (LOOP)
     // read keyboard input
@@ -49,15 +49,16 @@
     @LOOP
     0;JMP
 
-// how to make th entire screen black??
-// because screen address is 16384 
-// use pointer to move pointer to make pixel black or white
+// how to make the entire screen black??
+// because screen address is 16384 ,
+// use the pointer to make pixel black or white.
 (BLACK)
     @SCREEN
     D=A
     @i
-    M=D // set i to be SCREEN address 16384
+    M=D // set i to be SCREEN's address 16384.
     // after this step we only need to manipulate i instead of SCREEN
+    // you can't manipulate the screen variable directly,because screen is a constant.
     (BLACKLOOP)
         // if (i == KBD) goto LOOP
         // which means the pixels is full of the entire SCREEN
@@ -65,21 +66,22 @@
         D=M
         @KBD
         D=D-A
-        // SCREEN is full
+        // if SCREEN is full of balck pixels
+        // (screen address is equal to the keyboard address?)
         @LOOP
         D;JEQ
 
         // This is the hard part to understand
         // to make pixels black
         @i
-        A=M  // This step is to put address into A register
-        M=-1 // make the pixel black (use pointers)
+        A=M  // This step is to make the RAM[i]=-1,
+        M=-1 // which means black.
              // if you can't figure out what happens here you need 
              // to watch the video and learn more about pointers
         @i
         M=M+1 // let address plus 1
 
-        //or use following method 
+        // or use following method 
         // the prinpicle is the same
 //        // RAM[SCREEN+i]=-1
 //        @SCREEN
@@ -115,8 +117,8 @@
 
         // to make pixels white
         @i
-        A=M  // This step is to put address into A register
-        M=0  // make the pixel white
+        A=M  // This step is to make the RAM[i]=0,
+        M=0  // make the pixel white.
 
         @i
         M=M+1 // let address plus 1

@@ -1,5 +1,7 @@
 # Project README
 
+Other language: [简体中文](README_CN.md)
+
 **Author:** R7CKB@qq.com
 
 This project is divided into three segments: Paser, Code, and Symbol_Table. The primary goal is to create a simple assembler for the Hack computer architecture. The project is designed to be completed independently to enhance learning.
@@ -48,6 +50,9 @@ To use the assembler, follow these steps:
 - The provided code handles A-instructions, C-instructions, labels, and variables.
 
 - The assembler generates a `.hack` file as output.
+
+- The Rect.hack and RectL.hack will reprt a error, I search this problem in the internet, and use other people's code, this error still exist, So I don't think it's probably my fault.
+![error picture](Error.png)
 
 ## Feedback
 

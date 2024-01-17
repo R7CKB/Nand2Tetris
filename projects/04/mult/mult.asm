@@ -8,16 +8,16 @@
 // (R0, R1, R2 refer to RAM[0], RAM[1], and RAM[2], respectively.)
 
 // pseudocode 
-    //i=1
-    //sum=0
-//LOOP:
+    // i=1
+    // sum=0
+// LOOP:
     // if (i==R0) goto STOP
     // sum=sum+R1
     // i=i+1
     // goto LOOP
-//STOP
+// STOP
     // R2=sum
-//END
+// END
     // finished program
 
 // machine language

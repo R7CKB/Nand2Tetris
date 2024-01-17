@@ -1,10 +1,10 @@
-# author:R7CKB@qq.com
-# divide this Project into three segments: Paser, Code, Symbol_Table
-# do it all by yourself then you'll learn it worthwhile
+# Author:R7CKB@qq.com
+# Divide this Project into three segments: Paser, Code, Symbol_Table.
+# Do it all by yourself then you'll learn it worthwhile.
 
 """
 I'm not an English native speaker, so my sentences maybe wrong sometimes, hope you can understand.
-I'm a rookie in the Python, I want you to point out my faults, and I'll correct them as soon as possible.
+I'm a rookie in the Python, I want you to point out my faults, and I'll correct them ASAP.
 To be honest, you need to have your own thoughts,
 besides you can't rely solely on the guidelines either.
 If you rely too much on it,
@@ -18,7 +18,7 @@ I'll keep most of the primary steps and delete some unnecessary steps.
 from enum import Enum
 
 
-class InstructionType(Enum):  # use enumerating to make a type not be the string
+class InstructionType(Enum):  # use enumerating to make the type not be the string
     A_INSTRUCTION = 1
     C_INSTRUCTION = 2
 
@@ -30,7 +30,7 @@ class Parser:  # The parser only needs to parse each instruction
 
     """I delete the method hasMoreLine, I don't think it's useful to implement this project"""
 
-    def advance(self):  # Get the next instruction and make it current_instruction
+    def advance(self):  # Reads the next instruction from the input,and makes it the current instruction.
         line = self.instruction
         if "//" in line and not line.startswith("//"):  # for those comments not start withs //
             index = line.find("//")
@@ -50,9 +50,10 @@ class Parser:  # The parser only needs to parse each instruction
             self.instruction_type = ""
         else:
             self.instruction_type = InstructionType.C_INSTRUCTION
-            # In the all projects, you'll find it's no need to classify L_INSTRUCTION
-            # because L_INSTRUCTION is label,and we'll deal with labels in the scan method
+        # In this project, you'll find it's no need to classify L_INSTRUCTION,
+        # because L_INSTRUCTION is label,and we'll deal with labels in the scan method.
 
+    # only deal with the A_INSTRUCTION
     def symbol(self):
         return self.instruction[1:]
 
@@ -61,7 +62,9 @@ class Parser:  # The parser only needs to parse each instruction
             return self.instruction.split("=")[0]
         else:
             dest_comp = self.instruction.split(";")[0]
-            if "=" not in dest_comp:  # handle a case such as D;JMP ATTENTION: This D means comp not dest
+            # handle a case such as D;JMP
+            # ATTENTION: This D means comp not dest
+            if "=" not in dest_comp:
                 return None
             else:
                 return dest_comp.split("=")[0]
@@ -114,6 +117,7 @@ class Code:
         'D&M': '1000000',
         'D|M': '1010101',
     }
+    # This is the only problem, your can refer mine.
     dest_dict = {
         None: '000',
         'M': '001',
@@ -216,7 +220,7 @@ class Assembler:  # This class is responsible for the assembly
         index = self.file.find(".")
         file_name = self.file[:index]
         try:
-            with open(self.file, "r") as f, open(file_name + ".hack", "a") as fw:  # a means in the mode of appending
+            with open(self.file, "r") as f, open(file_name + ".hack", "a") as fw:  # 'a' means in the mode of appending
                 line = f.readline()
                 while line:
                     line = line.strip()
@@ -242,7 +246,7 @@ class Assembler:  # This class is responsible for the assembly
                         fw.write(machine_code)
                         fw.write("\n")
                     line = f.readline()
-        except FileNotFoundError as e:
+        except Exception as e:
             print(f"Error: {e}")
 
     def first_scan(self):  # For the first scan, add loops to the symbol_table
@@ -259,7 +263,7 @@ class Assembler:  # This class is responsible for the assembly
                     if line.startswith("("):
                         self.st.add_entry(line[1:-1], number + 1)  # add labels to the symbol_tables
                     line = f.readline()
-        except FileNotFoundError as e:
+        except Exception as e:
             print(f"Error: {e}")
 
     def second_scan(self):  # For the second scan, add variables to the symbol_table
@@ -277,12 +281,12 @@ class Assembler:  # This class is responsible for the assembly
                             self.st.add_entry(line[1:], BASE_ADDRESS)
                             BASE_ADDRESS += 1
                     line = f.readline()
-                print(self.st.symbol_table)
-        except FileNotFoundError as e:
+                # print(self.st.symbol_table)
+        except Exception as e:
             print(f"Error: {e}")
 
 
-file_asm = Assembler("Max.asm")
+file_asm = Assembler("RectL.asm")
 file_asm.first_scan()
 file_asm.second_scan()
 file_asm.compile()

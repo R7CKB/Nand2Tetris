@@ -13,7 +13,10 @@ CHIP RAM8 {
     OUT out[16];
 
     PARTS:
-    // 这里要注意的是使用DMux和Mux,按照视频里面的来,建议最后做PC,要不然思路会被打断
+    // It should be noted here that using DMux and Mux, 
+    // according to the video in the video, 
+    // it is recommended to make the PC at the end, 
+    // otherwise the train of thought will be interrupted.
     DMux8Way(in=load,sel=address,a=r1,b=r2,c=r3,d=r4,e=r5,f=r6,g=r7,h=r8);
     Register(in=in,load=r1,out=re1);
     Register(in=in,load=r2,out=re2);

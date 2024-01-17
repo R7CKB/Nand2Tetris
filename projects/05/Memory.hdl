@@ -19,13 +19,13 @@ CHIP Memory {
     OUT out[16];
 
     PARTS:
-    // 与RAM8那道题类似,利用的是地址的前两位不同各对应不同的状态
-    // 故可以使用DMux和Mux来解决这个问题
+    // as same as the RAM8
     // Elegant!!!
+    // because 16k = 2^14, so 0..13 bits means in the RAM range(0~16383). 
     DMux4Way(in=load,sel=address[13..14],a=RAM1,b=RAM2,c=Screen1,d=Keyboard);
-    RAM16K(in=in,load=RAM1,address=address[0..13],out=RAMout1); // 00
+    RAM16K(in=in,load=RAM1,address=address[0..13],out=RAMout1); // 00 means the initial two bits
     RAM16K(in=in,load=RAM2,address=address[0..13],out=RAMout2); // 01
-    Screen(in=in,load=Screen1,address=address[0..12],out=Screenout); // 10
-    Keyboard(out=Keyboardout); // 11
+    Screen(in=in,load=Screen1,address=address[0..12],out=Screenout); // 10 (16384~24575)
+    Keyboard(out=Keyboardout); // 11 (24576)
     Mux4Way16(a=RAMout1,b=RAMout2,c=Screenout,d=Keyboardout,sel=address[13..14],out=out);
 }
