@@ -170,3 +170,7 @@
     M=D
     @SP  // SP++
     M=M+1
+// finish the program
+(END)
+    @END
+    0;JMP

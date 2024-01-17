@@ -502,3 +502,7 @@
     M=!D  // same logic as the neg
     @SP  // SP++
     M=M+1
+// finish the program
+(END)
+    @END
+    0;JMP

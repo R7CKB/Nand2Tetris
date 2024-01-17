@@ -1,13 +1,9 @@
-# author:R7CKB@qq.com
-# divide it into three segments: Parser, CodeWriter, Main
+# Author:R7CKB@qq.com
+# Divide it into three segments: Parser, CodeWriter and Main.
 
 """
 I'm not an English native speaker, so my sentences maybe wrong sometimes, hope you can understand.
 I'm a rookie in the Python, if you can point out my faults, I'll appreciate you very much.
-In my opinion, this is as same as the Assembler, just a little different.
-Besides, I also need to change the Assembler Construction to make it more coherent.
-However, When I begin to implement this project, it isn't as easy as seen.
-Unlike Assembler, it's more challenging.
 If you have any questions, please ask me at any time.
 I'll answer you patiently.
 """
@@ -49,7 +45,7 @@ class Parser:  # parses each VM command into its lexical elements
     """ 
     maybe what I think is wrong,
     but I don't think the has_more_line method is useful (maybe because the Python language? ヾ(•ω•`)o)
-    maybe the structure is different?
+    or maybe the structure is different?
     """
 
     def commandType(self):  # classify these commands
@@ -184,10 +180,9 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     {CodeWriter.sp_inc}
 """
         # these three conditional commands are challenging;
-        # by running Vm emulator we can know that True=-1 False=0,
-        # besides we need to create jump condition (use line number to avoid jumping the same condition);
+        # besides, we need to create jump condition (use line number to avoid jumping the same condition);
         # whether true or false,you must make SP++,this is important,
-        # In additional,condition judgement must be the jump instruction
+        # In additional,condition judgement must be the jump instruction.
         elif command == "eq":
             assembler_language = f"""    {CodeWriter.sp_dec}
     {CodeWriter.d_eq_sp}
@@ -444,6 +439,19 @@ class Main:  # drives the process (VMTranslator)
     def __init__(self, file):
         self.file = file
 
+    def finish_program(self, file):
+        index = self.file.find(".")
+        file_name = self.file[:index]
+        try:
+            with open(file, "a") as fw:
+                finish_sentence = """// finish the program
+(END)
+    @END
+    0;JMP"""
+                fw.write(finish_sentence)
+        except Exception as e:
+            print(f"Error: {e}")
+
     def compile(self):
         # Create an asm file and write it
         index = self.file.find(".")
@@ -472,6 +480,7 @@ class Main:  # drives the process (VMTranslator)
                                                                        command.arg2())
                         fw.write(assembler_language)
                     line = f.readline()
+            self.finish_program(f"{file_name}.asm")
         except FileNotFoundError as e:
             print(f"Error: {e}")
 

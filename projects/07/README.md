@@ -1,5 +1,7 @@
 # VM Translator
 
+Other language:![简体中文](README_CN.md)
+
 ## Author
 Contact: R7CKB@qq.com
 
