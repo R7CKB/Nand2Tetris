@@ -51,8 +51,12 @@ To use the assembler, follow these steps:
 
 - The assembler generates a `.hack` file as output.
 
-- The Rect.hack and RectL.hack will reprt a error, I search this problem in the internet, and use other people's code, this error still exist, So I don't think it's probably my fault.
+- The Rect.hack and RectL.hack maybe report an error.
 ![error picture](Error.png)
+
+- if you encounter this error.you need to know that rect.asm run by the content in the RAM[0], and make sure the content in the RAM[0] isn't bigger than 255,because the max value of the screen is 255.
+
+- using Assembler to test the ouput file is better.
 
 ## Feedback
 
