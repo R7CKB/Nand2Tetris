@@ -17,6 +17,9 @@ tools
 *.html
 *.iml
 
+# 不加入图书
+*.equb
+
 # project中以.cmp和.tst和.out的文件
 *.cmp
 *.tst
