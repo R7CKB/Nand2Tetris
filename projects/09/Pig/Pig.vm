@@ -1,21 +1,21 @@
 function Pig.new 0
-push constant 1
+push constant 3
 call Memory.alloc 1
 pop pointer 0
 call LFSR32Rand.new 0
 pop this 0
+push constant 7
+pop this 1
+push constant 23
+pop this 2
 push pointer 0
 return
-function Pig.random 3
+function Pig.random 1
 push argument 0
 pop pointer 0
-push constant 7
-pop local 1
-push constant 59
-pop local 2
 push this 0
-push local 1
-push local 2
+push this 1
+push this 2
 call LFSR32Rand.seed 3
 pop temp 0
 push this 0
@@ -23,14 +23,14 @@ push constant 1
 push constant 3
 call LFSR32Rand.randRange 3
 pop local 0
-push local 2
-push constant 7
+push this 2
+push constant 29
 add
-pop local 1
-push local 1
-push constant 13
+pop this 1
+push this 1
+push constant 11
 add
-pop local 2
+pop this 2
 push local 0
 return
 function Pig.dispose 0

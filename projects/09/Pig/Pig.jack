@@ -2,22 +2,21 @@
 * who first reach the 100 score will win*/
 class Pig {
    field LFSR32Rand LSFR;
+   field int seed1,seed2;
 
    constructor Pig new() {
       let LSFR = LFSR32Rand.new();
+      let seed1 = 7;
+      let seed2 = 23;
       return this;
    }
 
    method int random() {
       var int number;
-      var int seed1;
-      var int seed2;
-      let seed1 = 7;
-      let seed2 = 59;
       do LSFR.seed(seed1,seed2);
       let number = LSFR.randRange(1,3);
-      let seed1 = seed2 + 7;
-      let seed2 = seed1 + 13;
+      let seed1 = seed2 + 29;
+      let seed2 = seed1 + 11;
       return number;
    }
    /** Disposes this Pig. */

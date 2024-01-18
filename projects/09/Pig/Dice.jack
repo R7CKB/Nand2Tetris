@@ -27,7 +27,7 @@ class Dice {
         do LSFR.seed(seed1,seed2);
         let number = LSFR.randRange(1,6);
         let seed1 = seed2 + 11;
-        let seed2 = seed1 + 13;
+        let seed2 = seed1 + 23;
         return number;
     }
 
@@ -36,7 +36,7 @@ class Dice {
         do LSFR.seed(seed3,seed4);
         let number = LSFR.randRange(1,12);
         let seed3 = seed4 + 2;
-        let seed4 = seed3 + 7;
+        let seed4 = seed3 + 17;
         return number;
     }
 
@@ -45,7 +45,7 @@ class Dice {
         do LSFR.seed(seed1,seed2);
         let number = LSFR.randRange(1,20);
         let seed5 = seed6 + 3;
-        let seed6 = seed5 + 5;
+        let seed6 = seed5 + 47;
         return number;
     }
     

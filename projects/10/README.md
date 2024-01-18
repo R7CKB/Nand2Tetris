@@ -1,5 +1,7 @@
 ## Jack Analyzer Readme
 
+Other language:[简体中文](README_CN.md)
+
 ### Project Overview
 This Jack Analyzer project is divided into three main parts: `JackTokenizer`, `CompilationEngine`, and `JackAnalyzer`. The project is designed for Project 10 and doesn’t include a code generator. It references concepts from Project 8 and Project 9.
 

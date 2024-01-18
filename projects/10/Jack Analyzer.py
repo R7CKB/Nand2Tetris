@@ -1,8 +1,8 @@
 # Author: R7CKB@qq.com
-# divide it into three parts: JackTokenizer, CompilationEngine, JackAnalyzer.
+# Divide it into three parts: JackTokenizer, CompilationEngine, JackAnalyzer.
 # This is for project 10, because this doesn't include code generator.
 # I've written project 10 with reference to project 8 and 9
-# you can look at project 8 and 9 to get more information
+# You can look at project 8 and 9 to get more information
 """
 This project doesn't like project 8 and 9,you need to recognize each token respectively.
 Besides, you need to generate the xxxT.xml, and then generate the xxx.xml.
