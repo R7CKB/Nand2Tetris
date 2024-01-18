@@ -1,5 +1,7 @@
 # JackCompiler: README
 
+Other language:[简体中文](README_CN.MD)
+
 ## Overview
 The JackCompiler project is a comprehensive system designed to translate Jack programming language code into virtual machine (VM) code. This project is structured into several key components: JackTokenizer, JackCompiler, CompilationEngine, SymbolTable, and VMWriter. It is an extension and optimization of a previous project (project 10) and is based on similar principles.
 

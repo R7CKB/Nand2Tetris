@@ -1,7 +1,6 @@
 # Author: R7CKB@qq.com
-# divide it into five parts: JackTokenizer, JackCompiler, CompilationEngine, SymbolTable, VMWriter
+# Divide it into five parts: JackTokenizer, JackCompiler, CompilationEngine, SymbolTable, VMWriter.
 # This is for project 11.
-# I've written project 10 with reference to project 10.
 # You can look at my past projects to get more information
 """
 This project is partly based on https://github.com/sherrydang/Nand2Tetris/blob/master/project11/CompilationEngine.py
@@ -10,8 +9,8 @@ to do is just to replace the corresponding statement in project 10 with the new 
 code.
 The problem is that the function | method | constructor parameter is depended on the corresponding var
 variables, instead of the parameter number.
-When you call these functions, you need to find the local(var) argument and
-count their number, which is the right function number.
+When you call these functions, you need to find the local(var) argument and count their number,
+which is the right function number.
 """
 import glob
 import os.path
@@ -420,8 +419,8 @@ class CompilationEngine:  # Handles the parsing
     def getParameterNumber(self):
         var_number = 0
         change = 0
-        # use foolish method to get the parameter
-        # use return to make sure the var variables in the same function,
+        # use foolish method to get the parameter,
+        # use return to make sure the var variables in the same function.
         return_index = self.tokenizer.token_list.index("return")
         for i in range(return_index):
             if self.tokenizer.token_list[i] == "var":
@@ -429,8 +428,8 @@ class CompilationEngine:  # Handles the parsing
                 another_var = self.tokenizer.token_list[i + 3]  # var int key,x,y;
                 while another_var != ";":
                     var_number += 1
-                    another_var = self.tokenizer.token_list[i + 3 + change]  # skip the ',
                     change += 2
+                    another_var = self.tokenizer.token_list[i + 3 + change]  # skip the ','
         return var_number
 
     # this method is to deal with the method | constructor | function three cases
@@ -643,7 +642,9 @@ class CompilationEngine:  # Handles the parsing
         self.compileTerm()  # term
 
         # (op term)*
-        if self.tokenizer.token in self.operators:
+        # change if to while
+        # if you use 'if', it'll only check one operator, so you need to use while.
+        while self.tokenizer.token in self.operators:
             operator = self.tokenizer.token
             self.process()  # process the operators
             self.compileTerm()  # term2
@@ -820,7 +821,6 @@ class JackCompiler:  # Drives the translation process.
         index = file_name.find(".")
         return file_name[:index]
 
-    # We're going to compile the main file at the end
     def compile(self):
         if self.isdir:
             files = glob.glob(f'{self.file}/*.jack')
@@ -837,5 +837,5 @@ class JackCompiler:  # Drives the translation process.
             process_file = CompilationEngine(self.file, file_name + ".vm")
 
 
-a = JackCompiler("ComplexArrays")
+a = JackCompiler("MemoryTest")
 a.compile()
