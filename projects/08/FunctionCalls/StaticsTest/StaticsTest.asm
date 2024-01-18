@@ -3,7 +3,7 @@
     @SP  // SP=256
     M=D
     @Sys.init$ret0
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -111,15 +111,15 @@
 // return
     @LCL
     D=M
-    @R14  // R14=end_Frame=LCL
+    @end_frame  // end_Frame=LCL
     M=D
     @5  // retAddr=RAM[end_Frame-5]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
-    @R15  // return_address=R15
+    @return_address  // return_address=R15
     M=D
     @SP  // SP--
     M=M-1  
@@ -135,40 +135,40 @@
     D=M+D
     @SP
     M=D
-    @1  // THAT=RAM[R14-1]
+    @1  // THAT=RAM[end_frame-1]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THAT
     M=D
-    @2  // THIS=RAM[R14-2]
+    @2  // THIS=RAM[end_frame-2]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THIS
     M=D
-    @3  // ARG=RAM[R14-3]
+    @3  // ARG=RAM[end_frame-3]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @ARG
     M=D
-    @4  // LCL=RAM[R14-4]
+    @4  // LCL=RAM[end_frame-4]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @LCL
     M=D
-    @R15
-    A=M  // Why is there this sentence?
+    @return_address
+    A=M  // use pointer's format
     0;JMP
 // function Class1.get 0
 (Class1.get)  
@@ -207,15 +207,15 @@
 // return
     @LCL
     D=M
-    @R14  // R14=end_Frame=LCL
+    @end_frame  // end_Frame=LCL
     M=D
     @5  // retAddr=RAM[end_Frame-5]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
-    @R15  // return_address=R15
+    @return_address  // return_address=R15
     M=D
     @SP  // SP--
     M=M-1  
@@ -231,42 +231,45 @@
     D=M+D
     @SP
     M=D
-    @1  // THAT=RAM[R14-1]
+    @1  // THAT=RAM[end_frame-1]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THAT
     M=D
-    @2  // THIS=RAM[R14-2]
+    @2  // THIS=RAM[end_frame-2]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THIS
     M=D
-    @3  // ARG=RAM[R14-3]
+    @3  // ARG=RAM[end_frame-3]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @ARG
     M=D
-    @4  // LCL=RAM[R14-4]
+    @4  // LCL=RAM[end_frame-4]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @LCL
     M=D
-    @R15
-    A=M  // Why is there this sentence?
+    @return_address
+    A=M  // use pointer's format
     0;JMP
-// function Class2.set 0
+// finish the program
+(END)
+    @END
+    0;JMP// function Class2.set 0
 (Class2.set)  
 // push argument 0
     @0
@@ -325,15 +328,15 @@
 // return
     @LCL
     D=M
-    @R14  // R14=end_Frame=LCL
+    @end_frame  // end_Frame=LCL
     M=D
     @5  // retAddr=RAM[end_Frame-5]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
-    @R15  // return_address=R15
+    @return_address  // return_address=R15
     M=D
     @SP  // SP--
     M=M-1  
@@ -349,40 +352,40 @@
     D=M+D
     @SP
     M=D
-    @1  // THAT=RAM[R14-1]
+    @1  // THAT=RAM[end_frame-1]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THAT
     M=D
-    @2  // THIS=RAM[R14-2]
+    @2  // THIS=RAM[end_frame-2]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THIS
     M=D
-    @3  // ARG=RAM[R14-3]
+    @3  // ARG=RAM[end_frame-3]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @ARG
     M=D
-    @4  // LCL=RAM[R14-4]
+    @4  // LCL=RAM[end_frame-4]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @LCL
     M=D
-    @R15
-    A=M  // Why is there this sentence?
+    @return_address
+    A=M  // use pointer's format
     0;JMP
 // function Class2.get 0
 (Class2.get)  
@@ -421,15 +424,15 @@
 // return
     @LCL
     D=M
-    @R14  // R14=end_Frame=LCL
+    @end_frame  // end_Frame=LCL
     M=D
     @5  // retAddr=RAM[end_Frame-5]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
-    @R15  // return_address=R15
+    @return_address  // return_address=R15
     M=D
     @SP  // SP--
     M=M-1  
@@ -445,42 +448,45 @@
     D=M+D
     @SP
     M=D
-    @1  // THAT=RAM[R14-1]
+    @1  // THAT=RAM[end_frame-1]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THAT
     M=D
-    @2  // THIS=RAM[R14-2]
+    @2  // THIS=RAM[end_frame-2]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THIS
     M=D
-    @3  // ARG=RAM[R14-3]
+    @3  // ARG=RAM[end_frame-3]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @ARG
     M=D
-    @4  // LCL=RAM[R14-4]
+    @4  // LCL=RAM[end_frame-4]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @LCL
     M=D
-    @R15
-    A=M  // Why is there this sentence?
+    @return_address
+    A=M  // use pointer's format
     0;JMP
-// function Sys.init 0
+// finish the program
+(END)
+    @END
+    0;JMP// function Sys.init 0
 (Sys.init)  
 // push constant 6
     @6
@@ -500,7 +506,7 @@
     M=M+1
 // call Class1.set 2
     @Class1.set$ret28
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -582,7 +588,7 @@
     M=M+1
 // call Class2.set 2
     @Class2.set$ret32
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -648,7 +654,7 @@
     M=D
 // call Class1.get 0
     @Class1.get$ret34
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -699,7 +705,7 @@
 (Class1.get$ret34)
 // call Class2.get 0
     @Class2.get$ret35
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -751,5 +757,9 @@
 // label END
 (END)
 // goto END
+    @END
+    0;JMP
+// finish the program
+(END)
     @END
     0;JMP

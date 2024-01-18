@@ -3,7 +3,7 @@
     @SP  // SP=256
     M=D
     @Sys.init$ret0
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -110,7 +110,7 @@
     A=M
     D=M  // D=RAM[SP]
     @N_LT_2
-    D;JLT
+    D;JNE
 // goto N_GE_2
     @N_GE_2
     0;JMP
@@ -134,15 +134,15 @@
 // return
     @LCL
     D=M
-    @R14  // R14=end_Frame=LCL
+    @end_frame  // end_Frame=LCL
     M=D
     @5  // retAddr=RAM[end_Frame-5]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
-    @R15  // return_address=R15
+    @return_address  // return_address=R15
     M=D
     @SP  // SP--
     M=M-1  
@@ -158,40 +158,40 @@
     D=M+D
     @SP
     M=D
-    @1  // THAT=RAM[R14-1]
+    @1  // THAT=RAM[end_frame-1]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THAT
     M=D
-    @2  // THIS=RAM[R14-2]
+    @2  // THIS=RAM[end_frame-2]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THIS
     M=D
-    @3  // ARG=RAM[R14-3]
+    @3  // ARG=RAM[end_frame-3]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @ARG
     M=D
-    @4  // LCL=RAM[R14-4]
+    @4  // LCL=RAM[end_frame-4]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @LCL
     M=D
-    @R15
-    A=M  // Why is there this sentence?
+    @return_address
+    A=M  // use pointer's format
     0;JMP
 // label N_GE_2
 (N_GE_2)
@@ -236,7 +236,7 @@
     M=M+1
 // call Main.fibonacci 1
     @Main.fibonacci$ret14
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -326,7 +326,7 @@
     M=M+1
 // call Main.fibonacci 1
     @Main.fibonacci$ret18
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -394,15 +394,15 @@
 // return
     @LCL
     D=M
-    @R14  // R14=end_Frame=LCL
+    @end_frame  // end_Frame=LCL
     M=D
     @5  // retAddr=RAM[end_Frame-5]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
-    @R15  // return_address=R15
+    @return_address  // return_address=R15
     M=D
     @SP  // SP--
     M=M-1  
@@ -418,42 +418,45 @@
     D=M+D
     @SP
     M=D
-    @1  // THAT=RAM[R14-1]
+    @1  // THAT=RAM[end_frame-1]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THAT
     M=D
-    @2  // THIS=RAM[R14-2]
+    @2  // THIS=RAM[end_frame-2]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THIS
     M=D
-    @3  // ARG=RAM[R14-3]
+    @3  // ARG=RAM[end_frame-3]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @ARG
     M=D
-    @4  // LCL=RAM[R14-4]
+    @4  // LCL=RAM[end_frame-4]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @LCL
     M=D
-    @R15
-    A=M  // Why is there this sentence?
+    @return_address
+    A=M  // use pointer's format
     0;JMP
-// function Sys.init 0
+// finish the program
+(END)
+    @END
+    0;JMP// function Sys.init 0
 (Sys.init)  
 // push constant 4
     @4
@@ -465,7 +468,7 @@
     M=M+1
 // call Main.fibonacci 1
     @Main.fibonacci$ret23
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     @SP  // RAM[SP]=D
     A=M
     M=D  // push return_address
@@ -517,5 +520,9 @@
 // label END
 (END)
 // goto END
+    @END
+    0;JMP
+// finish the program
+(END)
     @END
     0;JMP

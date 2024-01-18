@@ -87,6 +87,7 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     A=M
     D=M  // D=RAM[SP]"""
 
+    # RAM[addr]=RAM[SP]
     RAM_addr_eq_RAM_SP = """@SP  // RAM[SP]
     A=M
     D=M
@@ -94,6 +95,7 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     A=M
     M=D"""
 
+    # RAM[SP]=RAM[addr]
     RAM_sp_eq_RAM_addr = """@addr  //RAM[addr]
     A=M
     D=M
@@ -481,7 +483,7 @@ class Main:  # drives the process (VMTranslator)
                         fw.write(assembler_language)
                     line = f.readline()
             self.finish_program(f"{file_name}.asm")
-        except FileNotFoundError as e:
+        except Exception as e:
             print(f"Error: {e}")
 
 

@@ -1,5 +1,7 @@
 ## Project 8 - VM Translator
 
+Other language:[简体中文](README_CN.md)
+
 ### Overview
 
 This project involves building a Virtual Machine (VM) translator that can translate a program written in the VM language into assembly language. The translator consists of three main components: `Parser`, `CodeWriter`, and `Main`. This README provides an overview of the project structure and functionalities.

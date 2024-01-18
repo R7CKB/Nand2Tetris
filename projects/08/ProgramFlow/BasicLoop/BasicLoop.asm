@@ -160,7 +160,7 @@
     A=M
     D=M  // D=RAM[SP]
     @LOOP
-    D;JGT
+    D;JNE
 // push local 0
     @0
     D=A
@@ -176,3 +176,7 @@
     M=D
     @SP  // SP++
     M=M+1
+// finish the program
+(END)
+    @END
+    0;JMP

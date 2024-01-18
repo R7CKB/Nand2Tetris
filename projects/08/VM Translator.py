@@ -1,23 +1,19 @@
-# author:R7CKB@qq.com
-#  I divide it into three segments: Parser, CodeWriter, Main
+# Author:R7CKB@qq.com
+# I divide it into three segments: Parser, CodeWriter and Main.
 # This is for project8,because of the label and the function,
-# we need to use indent to let our codes look more readable
+# We need to use indent to let our codes look more readable.
+
 """
 Before you do this project, I recommend you to review the project4;
 you can have a better understanding of the assembly language.
 I'm not an English native speaker, so my sentences maybe wrong sometimes, hope you can understand.
 I'm a rookie in the Python, if you can point out my faults, I'll appreciate you very much.
-In my opinion, this is as same as the Assembler, just a little different.
-Besides, I also need to change the Assembler Construction to make it more coherent.
-However, When I begin to implement this project, it isn't as easy as seen.
-Unlike Assembler, it's more challenging.
 If you have any questions, please ask me at any time.
 I'll answer you patiently.
-
 """
 
-from enum import Enum
 import glob  # this for match different .vm files
+from enum import Enum
 
 
 class CommandType(Enum):  # use enumerating to make types instead of string
@@ -34,7 +30,7 @@ class CommandType(Enum):  # use enumerating to make types instead of string
 
 class Parser:  # parses each VM command into its lexical elements
     """
-    Parser class is as same as the Assembler, this class isn't difficult.
+    Parser class is the same as the project7, this class isn't difficult.
     """
 
     def __init__(self, sentence):
@@ -46,7 +42,7 @@ class Parser:  # parses each VM command into its lexical elements
         if "//" in line and not line.startswith("//"):  # For those comments that follow the commands
             index = line.find("//")
             self.command = line[:index].strip()
-        elif not line.startswith("//") and line:  # not space line and comment line
+        elif not line.startswith("//") and line:  # not blank line and comment line
             self.command = line.strip()
         else:  # For those comments that stand alone
             self.command = ""  # Remove unnecessary things (ignore space and comments)
@@ -54,7 +50,7 @@ class Parser:  # parses each VM command into its lexical elements
     """ 
     maybe what I think is wrong,
     but I don't think the has_more_line method is useful (maybe because the Python language? ヾ(•ω•`)o)
-    maybe the structure is different?
+    or maybe the structure is different?
     """
 
     def commandType(self):  # classify these commands
@@ -108,6 +104,7 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     A=M
     D=M  // D=RAM[SP]"""
 
+    # RAM[addr]=RAM[SP]
     RAM_addr_eq_RAM_SP = """@SP  // RAM[SP]
     A=M
     D=M
@@ -115,6 +112,7 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     A=M
     M=D"""
 
+    # RAM[SP]=RAM[addr]
     RAM_sp_eq_RAM_addr = """@addr  //RAM[addr]
     A=M
     D=M
@@ -476,13 +474,12 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     # if cond jump to execute the command just after the label
     # else executes the next command.
 
-    # test the FibonacciSeries and BasicLoop, you should use the JGT instead of JLT
     @staticmethod
     def write_if(label):
         assembler_language = f"""    {CodeWriter.sp_dec}
     {CodeWriter.d_eq_sp}
     @{label}
-    D;JLT
+    D;JNE
 """
         return assembler_language
 
@@ -500,11 +497,19 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
         return function_label + assembler_language
 
     def write_call(self, function_name, nArgs):
-        # First, we need to store the return address and caller's segment pointers
-        # use sp pointer to store each value
-        # second. We need to reposition LCL and ARG
+        # First, we need to store the return address and caller's segment pointers, use sp pointer to store each
+        # value. Second, We need to reposition LCL and ARG.
+        # Call f nArgs
+        # // push returnAddress
+        # // push LCL
+        # // push ARG
+        # // push THIS
+        # // push THAT
+        # // ARG=SP-5-nArgs
+        # // LCL=SP
+        # // goto f
         assembler_language = f"""    @{function_name}$ret{self.number}
-    D=A  // This A mean address (But Why?)
+    D=A  // This A mean (return_address)'s address 
     {CodeWriter.sp_eq_d}  // push return_address
     {CodeWriter.sp_inc}
     @LCL  // push LCL
@@ -523,7 +528,7 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     D=M
     {CodeWriter.sp_eq_d}  
     {CodeWriter.sp_inc}
-    @5  // reposition ARG (This should be OK)
+    @5  // reposition ARG (ARG=SP-5-nArgs)
     D=A
     @{nArgs}
     D=D+A
@@ -531,7 +536,7 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     D=M-D
     @ARG
     M=D
-    @SP // this step seems important LCL=SP
+    @SP // this step seems important (LCL=SP)
     D=M
     @LCL  
     M=D
@@ -542,21 +547,31 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
         return assembler_language
 
     # This is challenging;
-    # after seeing many of the answers, it seems they all see end_frame as R13 or R14,
-    # which is mentioned in the book.
+    # you can see end_frame as a variable,
+    # the book mentions it in the chapter8.
+    # Return
+    # // frame=LCL
+    # // retAddr=*(frame-5)
+    # // *ARG=pop()
+    # // SP=ARG+1
+    # // THAT=*(frame-1)
+    # // THIS=*(frame-2)
+    # // ARG=*(frame-3)
+    # // LCL=*(frame-4)
+    # // goto retAddr
     @staticmethod
     def write_return():
         assembler_language = f"""    @LCL
     D=M
-    @R14  // R14=end_Frame=LCL
+    @end_frame  // end_Frame=LCL
     M=D
     @5  // retAddr=RAM[end_Frame-5]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
-    @R15  // return_address=R15
+    @return_address  // return_address=R15
     M=D
     {CodeWriter.sp_dec}  
     {CodeWriter.d_eq_sp}
@@ -569,40 +584,40 @@ class CodeWriter:  # writes the assembly code that implements the parsed command
     D=M+D
     @SP
     M=D
-    @1  // THAT=RAM[R14-1]
+    @1  // THAT=RAM[end_frame-1]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THAT
     M=D
-    @2  // THIS=RAM[R14-2]
+    @2  // THIS=RAM[end_frame-2]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @THIS
     M=D
-    @3  // ARG=RAM[R14-3]
+    @3  // ARG=RAM[end_frame-3]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @ARG
     M=D
-    @4  // LCL=RAM[R14-4]
+    @4  // LCL=RAM[end_frame-4]
     D=A
-    @R14
+    @end_frame
     D=M-D
     A=D
     D=M
     @LCL
     M=D
-    @R15
-    A=M  // Why is there this sentence?
+    @return_address
+    A=M  // use pointer's format
     0;JMP
 """
         return assembler_language
@@ -612,6 +627,19 @@ class Main:  # drives the process (VMTranslator)
     def __init__(self, file):
         self.file = file
         self.file_name = ""
+
+    def finish_program(self, file):
+        index = self.file.find(".")
+        file_name = self.file[:index]
+        try:
+            with open(file, "a") as fw:
+                finish_sentence = """// finish the program
+(END)
+    @END
+    0;JMP"""
+                fw.write(finish_sentence)
+        except Exception as e:
+            print(f"Error: {e}")
 
     def compile(self):
         files = glob.glob(f"{self.file}/*.vm")  # traverse all the .vm files,just for directory
@@ -674,9 +702,10 @@ class Main:  # drives the process (VMTranslator)
                             assembler_language = translator.write_return()
                             fw.write(assembler_language)
                         line = f.readline()
-        except FileNotFoundError as e:
+                self.finish_program(f"{self.file}.asm")
+        except Exception as e:
             print(f"Error: {e}")
 
 
-a = Main("StaticsTest")
+a = Main("NestedCall")
 a.compile()

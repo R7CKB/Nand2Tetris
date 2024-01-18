@@ -145,7 +145,7 @@
     A=M
     D=M  // D=RAM[SP]
     @COMPUTE_ELEMENT
-    D;JGT
+    D;JNE
 // goto END
     @END
     0;JMP
@@ -311,3 +311,7 @@
     0;JMP
 // label END
 (END)
+// finish the program
+(END)
+    @END
+    0;JMP
