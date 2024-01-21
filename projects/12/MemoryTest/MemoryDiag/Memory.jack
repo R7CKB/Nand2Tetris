@@ -1,0 +1,91 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Memory.jack
+
+/**
+ * This library provides two services: direct access to the computer's main
+ * memory (RAM), and allocation and recycling of memory blocks. The Hack RAM
+ * consists of 32,768 words, each holding a 16-bit binary number.
+ */ 
+class Memory {
+    // freelist[0] means the next
+    // freelist[1] means the size
+    // ram includes heap
+    // this called Dynamic memory allocation
+    static Array ram,heap,freelist; 
+
+    /** Initializes the class. */
+    function void init() {
+        let ram = 0;
+        let heap = 2048; // heapBase
+        // freelist like a pointer
+        let freelist = heap; // freelist = heapBase
+        // 0 is the end of the linked list. 
+        let heap[0] = 0; // next
+        let heap[1] = 14334; // length exclude overhead
+        return;
+    }
+
+    /** Returns the RAM value at the given address. */
+    function int peek(int address) {
+        return ram[address];
+    }
+
+    /** Sets the RAM value at the given address to the given value. */
+    function void poke(int address, int value) {
+        let ram[address] = value;
+        return;
+    }
+
+    // we need to use a linked list to keep track of available memory segments.
+    // I suppose you should use the other variable to replace with the freelist,
+    // instead of using it directly. 
+    /** Finds an available RAM block of the given size and returns
+     *  a reference to its base address. */
+    function int alloc(int size) {
+        // use first-fit heuristic
+        var int addr,block;
+        let block = freelist;
+        while(true) {
+            if (~(block[1] < (size + 2))) { // capacity >= size + 2
+                let addr = block + 2 + block[1] - size;
+                let ram[addr-1] = size; // or let addr[-1] = size; 
+                let ram[addr-2] = 0;    // or let addr[-2] = 0;
+                let block[1] = block[1] - size - 2; // reduce the capacity
+                return addr;
+            }
+            if (block[0] = 0) {
+                return 0;
+            }
+            else {
+                let block = block[0];
+            }
+        }
+        // out of capacity
+        return 0;
+    }
+
+    /** De-allocates the given object (cast as an array) by making
+     *  it available for future allocations. */
+    function void deAlloc(Array o) {
+        // o means the address for the object
+        var int block,next;
+        let next = o - 2;
+        let block = freelist;
+        while (true) {
+            if (block[0] = 0) {
+                let block[0] = next;
+                return; 
+            }
+            else {
+                let block = block[0];
+            }
+        }
+        return;
+        // pseudocode
+        // if the recycle block is the end of the linked list,
+        // we just add it to the end of the linked list,
+        // else we chage the next pointer to the o's next pointer
+    }    
+}
