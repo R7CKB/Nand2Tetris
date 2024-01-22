@@ -1,0 +1,194 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Math.jack
+
+/** A library of commonly used mathematical functions.
+ *  All functions runs in O(n), where n is the number of bits used
+ *  for representing a two's complement integer value (16 in the Hack computer). 
+ *  Note: Jack compilers implement multiplication and division
+ *  using calls to OS functions in this class.
+ */
+class Math {
+    // I don't know how to use this n?
+    // static int n;             // Number of bits used for representing a two's complement integer
+    static Array powersOfTwo; // Stores 2^0, 2^1, 2^2,..., 2^(n-1)
+    static int totalY; // for use in divide
+
+    // Initializes the Math library.
+    function void init() {
+        var int number,index;
+        let index = 0;
+        let number = 1; 
+        let powersOfTwo = Array.new(16);
+        // Initializes the Array powersOfTwo
+        while (index < 16) {
+            let powersOfTwo[index] = number;
+            let number = number + number;
+            let index = index + 1;
+        }
+        return;
+        
+        // // another method
+        // let powersOfTwo = Array.new(16);
+        // // If you directly assign a value of 32768, an error will be reported,
+        // // Because the max value you can push is 32767.
+        // let powersOfTwo[0] = 1;
+        // let powersOfTwo[1] = 2;
+        // let powersOfTwo[2] = 4;
+        // let powersOfTwo[3] = 8;
+        // let powersOfTwo[4] = 16;
+        // let powersOfTwo[5] = 32;
+        // let powersOfTwo[6] = 64;
+        // let powersOfTwo[7] = 128;
+        // let powersOfTwo[8] = 256;
+        // let powersOfTwo[9] = 512;
+        // let powersOfTwo[10] = 1024;
+        // let powersOfTwo[11] = 2048;
+        // let powersOfTwo[12] = 4096;
+        // let powersOfTwo[13] = 8192;
+        // let powersOfTwo[14] = 16384;
+        // let powersOfTwo[15] = 16384 + 16384;
+        // return;
+    }
+
+    // Return true if the i-th bit of x is 1, false otherwise.
+    // you can only use equal 0, instead of equal 1
+    // this is easy logic (´。＿。｀)
+    // example like following:
+    /*     if x = 15(0000000000001101)
+    *  powersOfTwo[4]=0000000000010000
+    *  -------------------------------
+    *                0000000000000000
+    */
+    function boolean bit(int x, int i) {
+        return (powersOfTwo[i] & x) = powersOfTwo[i];
+    }
+        
+    /** Returns the product of x and y. 
+     *  When a Jack compiler detects the multiplication operator '*' in the 
+     *  program's code, it handles it by invoking this method. In other words,
+     *  the Jack expressions x*y and multiply(x,y) return the same value.
+     */
+    function int multiply(int x, int y) {
+        var int idx, sum, shiftedX, z;
+        let idx = 0;
+        let sum = 0;
+        
+        // I don't know how this steps works,
+        // but it seems important 
+        if (x > y) {
+            let shiftedX = x;
+            let z = y;
+        }
+        else {
+            let shiftedX = y;
+            let z = x;
+        }       
+        
+        while (idx < 16) { //16 bits
+            if (Math.bit(z, idx)) {
+                let sum = sum + shiftedX;
+            }
+            let shiftedX = shiftedX + shiftedX;
+            let idx = idx + 1;  
+        }
+        
+        return sum;   
+    }
+
+    // Returns the y-power of x
+    function int pow(int x,int y) {
+        var int sum,index;
+        let sum = 1;
+        let index = 0;
+        while (index < y) {
+            let sum = sum * x;
+            let index = index + 1;
+        }
+        return sum;
+    }
+
+    /** Returns the integer part of x / y.
+     *  When a Jack compiler detects the division operator '/'
+     *  an an expression, it handles it by invoking this method.
+     *  Thus, x/y and Math.divide(x,y) return the same value.
+     */
+    function int divide(int x, int y) {
+        var boolean flag;
+        var int q;
+        let flag= false;
+        if (((x > 0) & (y < 0)) | ((x < 0) & (y > 0))) {
+            let flag = true;
+        }
+        let x = Math.abs(x);
+        let y = Math.abs(y);
+        if ((y > x) | (y < 0)) {
+            return 0;
+        }
+        let q = Math.divide(x, 2 * y);
+        if ((x - (2 * q * y)) < y) {
+            if (flag) {
+                return (-2) * q;
+            }
+            else {
+                return 2 * q;
+            }
+        }
+        else {
+            if (flag) {
+                return ((2 * q) + 1) * (-1);
+            }
+            else {
+                return (2 * q) + 1;
+            }
+        }
+    }
+
+
+    /** Returns the integer part of the square root of x.
+    */
+    function int sqrt(int x) {
+        var int y,j;
+        let y = 0;
+        // n means x's digit
+        // because 0 <= x < 2^n
+        // so max value of n is 16
+        // so j equals n/2 - 1 == 7
+        let j = 7;
+        while (~(j < 0)) {
+            if ((~((Math.pow(y + Math.pow(2,j),2)) > x)) & (Math.pow(y + Math.pow(2,j),2) > 0)) {
+                let y = y + Math.pow(2,j);
+            }
+            let j = j - 1;
+        }
+        return y;
+    }
+
+    /** Returns the greater value.
+    */
+    function int max(int a, int b) {
+        if (a < b) {
+            return b;
+        }
+        return a;
+    }
+
+    /** Returns the smaller value.
+    */
+    function int min(int a, int b) {
+        if (a < b) {
+            return a;
+        }
+        return b;
+    }
+
+    /** Returns the absolute value of x
+    */
+    function int abs(int x) {
+        if (x < 0) {
+            return -x;
+        }
+        return x;
+    }
+}

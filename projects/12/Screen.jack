@@ -1,0 +1,182 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/12/Screen.jack
+
+/**
+ * A library of functions for displaying graphics on the screen.
+ * The Hack physical screen consists of 512 rows (indexed 0..511, top to bottom)
+ * of 256 pixels each (indexed 0..255, left to right). The top left pixel on 
+ * the screen is indexed (0,0).
+ */
+class Screen {
+
+    static boolean color; // use a static variable to represent the color
+    static Array powersOfTwo;
+
+    /** Initializes the Screen. */
+    function void init() {
+        var int number,index;
+        let index = 0;
+        let number = 1;
+        let color = true; // true means black
+        let powersOfTwo = Array.new(16);
+        while (index < 16) {
+            let powersOfTwo[index] = number;
+            let number = number + number;
+            let index = index + 1;
+        }
+        return;
+    }
+
+    /** Erases the entire screen. */
+    function void clearScreen() {
+        do Screen.setColor(false);
+        do Screen.drawRectangle(0,0,511,255);
+        return;
+    }
+
+    /** Sets the current color, to be used for all subsequent drawXXX commands.
+     *  Black is represented by true, white by false. */
+    function void setColor(boolean b) {
+        let color = b;
+        return;
+    }
+
+    /** Draws the (x,y) pixel, using the current color. */
+    // Remember from writing drawPixel() that the LSB of the screen word is the leftmost pixel.
+    function void drawPixel(int x, int y) {
+        // Each row consists of 32 memory addresses, each of which has 16 bits.
+        // Down is y, and right is x.
+        var int address,value,i;
+        let address = (32 * y) + (x / 16);
+        let value = Memory.peek(16384 + address);
+        // set the (x % 16)th bit of value to the current color
+        let i = x - ((x / 16) * 16);
+        // because the screen address is between the 16284 and 24576.
+        // 24576 menas 0110000000000000
+        // 16384 means 0100000000000000
+        // value is 0000000000000000 by default
+        // the logic is same as the multiply method. 
+        if (color) {
+            // if color is true(black) we need to change the bits into 1.
+            // example (5,12), then the address will be set to 384
+            // which repersents 0100000110000000 (after plus 16384)
+            // i wil be set to 5.
+            // powerOfTwo[5] means 0000000000100000
+            // after or operation
+            // 0000000000000000
+            // 0000000000100000
+            // 0000000000100000
+            let value = (powersOfTwo[i]) | value;
+        }
+        else {
+            // the white is the same logic.
+            let value = ~(powersOfTwo[i]) & value;
+        }
+        do Memory.poke((16384 + address),value);
+        return;
+    }
+
+    /** Draws a line from pixel (x1,y1) to pixel (x2,y2), using the current color. */
+    function void drawLine(int x1, int y1, int x2, int y2) {
+        var int a,b,dx,dy,diff,tempx,tempy;
+        var boolean y_direction;
+        if (x1 = x2) {
+            do Screen.draw_vertical_line(x1,y1,y2);
+            return;
+        }
+        if (y1 = y2) {
+            do Screen.draw_horizontal_line(y1,x1,x2);
+            return;
+        }
+        // y_direction means up or down of y
+        let y_direction = false;
+        let a = 0;
+        let b = 0;
+        // make a turn over
+        if (x1 > x2) {
+            let tempx = x1;
+            let x1 = x2;
+            let x2 = tempx;
+            let tempy = y1;
+            let y1 = y2;
+            let y2 = tempy;
+        }
+        let dx = x2 - x1;
+        let dy = y2 - y1;
+        // means the direction is northeastern
+        if (dy < 0) {
+            let y_direction = true;
+            let dy = -dy;
+        }
+        let diff = (a * dy) - (b * dx);
+        while ((~(a > dx)) & (~(b > dy))) {
+            if (y_direction) {
+                do Screen.drawPixel(x1 + a, y1 - b);
+            } 
+            else {
+                do Screen.drawPixel(x1 + a, y1 + b);
+            }
+            if (diff < 0) {
+                let a = a + 1;
+                let diff = diff + dy;
+            } 
+            else {
+                let b = b + 1;
+                let diff = diff - dx;
+            }
+        }
+        return;
+    }
+    
+    function void draw_vertical_line(int x,int y1,int y2) {
+        var int min_value,max_value,diff;
+        let min_value = Math.min(y1,y2);
+        let max_value = Math.max(y1,y2);
+        let diff = max_value - min_value;
+        while (~(diff < 0)) {
+            do Screen.drawPixel(x,min_value);
+            let min_value = min_value + 1;
+            let diff = max_value - min_value; 
+        }
+        return;
+    }
+
+    function void draw_horizontal_line(int y,int x1 ,it x2) {
+        var int min_value,max_value,diff;
+        let max_value = Math.max(x1,x2);
+        let min_value = Math.min(x1,x2);
+        let diff = max_value - min_value;
+        while (~(diff < 0)) {
+            do Screen.drawPixel(min_value,y);
+            let min_value = min_value + 1;
+            let diff = max_value - min_value; 
+        }
+        return;
+    }
+
+    /** Draws a filled rectangle whose top left corner is (x1, y1)
+     * and bottom right corner is (x2,y2), using the current color. */
+    function void drawRectangle(int x1, int y1, int x2, int y2) {
+        while (~(y1 > y2)) {
+            do Screen.draw_horizontal_line(y1,x1,x2);
+            let y1 = y1 + 1;
+        }
+        return;
+    }
+
+    /** Draws a filled circle of radius r<=181 around (x,y), using the current color. */
+    function void drawCircle(int x, int y, int r) {
+        var int dy;
+        // limit r to be no greater than 181. 
+        let dy = -r;
+        if (~(r > 181)) {
+            while (~(dy > r)) {
+                do Screen.drawLine((x - Math.sqrt((r * r)-(dy * dy))),y + dy,(x + Math.sqrt((r * r) - (dy * dy))),y + dy);
+                let dy = dy + 1;
+            }
+        }
+        return;
+    }
+}
