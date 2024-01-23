@@ -1,5 +1,8 @@
 # Nand2Tetris Project
 
+Other langauge:[简体中文](README_CN.md)
+
+
 ## Project Overview
 
 This project is an implementation based on the Nand2Tetris course, aiming to deepen the understanding of computer hardware and software principles by going through the process from basic NAND gates to building a complete computer system.
