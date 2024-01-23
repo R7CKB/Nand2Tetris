@@ -49,7 +49,7 @@ cd Nand2Tetris
 
 If you have any questions or suggestions, feel free to contact me:
 
-- Email: [R7CKB@qq.com](R7CKB@qq.com)
+- Email: R7CKB@qq.com
 
 ## Copyright and License
 
